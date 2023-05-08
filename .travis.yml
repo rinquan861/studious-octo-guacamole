@@ -1,1 +1,3 @@
 
+os: windows
+run: choco install googlechrome
