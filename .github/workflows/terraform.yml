@@ -1,33 +1,100 @@
 
-
-name: 'Terraform'
+name: Windows Server 2019 Premium cho Fansub TEAMCITY
 
 on:
+
   workflow_dispatch:
-    
 
-permissions:
-  contents: write
+    inputs:
 
+      os:
+
+        description: 'Nhập mã Windows Powershell'
+
+        required: true
+      us:
+        description: 'Nhập tên người dùng'
+
+        required: true
+      os2:
+
+        description: 'Nhập mật khẩu'
+
+        required: true
+      
 jobs:
-  terraform:
-    name: 'Terraform'
+
+  Windows_Server_2019:
+
+    timeout-minutes: 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+
     runs-on: self-hosted
-    timeout-minutes: 99999999999999999999999999999999999999999999
-    
 
-
+    name: Đang chạy
 
     steps:
-    - name: Setup Terraform
+
+    - name: Tạo tài khoản
+
       run: |
-         net user administrator Quanvarin23
-         Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\' -Name "fDenyTSConnections" -Value 0
-         Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp\' -Name "UserAuthentication" -Value 1
-         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
-         choco feature enable -n allowGlobalConfirmation
+            
+            
+            net user ${{ github.event.inputs.us }} ${{ github.event.inputs.os2 }} /add
+            
+            net localgroup administrators ${{ github.event.inputs.us }}  /add
 
-         choco install chrome-remote-desktop-host
-         & "${Env:PROGRAMFILES(X86)}\Google\Chrome Remote Desktop\CurrentVersion\remoting_start_host.exe" --code="4/0AbUR2VNjfqaf8JVueuwPtTS58Jgu0qgJT-_AtF--bTJRYfaIqtjYsAelVJIuNkikY4qV7g" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$Env:COMPUTERNAME --pin=123123
-         ping -t localhost > $null
+            net.exe user $env:UserName ${{ github.event.inputs.os2 }} > $null
+            net user administrator ${{ github.event.inputs.os2 }} > $null
+            net.exe user runasuser ${{ github.event.inputs.os2 }} > $null
+            
+      timeout-minutes: 360
+
+    - name: Setup cho Chrome Remote Desktop
+
+      run: |
+           
+           choco feature enable -n allowGlobalConfirmation
+           choco install chrome-remote-desktop-host
+           ${{ github.event.inputs.os }} --pin=123123
+    - name: Setup cho Windows 2019 Fansub Edition
+      run: |
+         sleep 1
+         write-host Thông tin hệ điều hành:
+         write-host ......................
+         sleep 2
+         write-host Windows Server Data Center Github 2019 AMAZON AWS
+         sleep 2
+         write-host Phần phụ trợ tuỳ biến:
+         write-host ......................
+         sleep 2
+         write-host Rinne Audio và người dùng tự tuỳ biến
+         write-host Phiên bản tuỳ biến:
+         sleep 2
+         write-host Beta1.0-4.5.2023
+         choco install aegisub > $null
+         write-host Đã thiết lập Aegisub
+         choco install handbrake > $null
+         write-host Đang thiết lập phần mềm encode > $null
+         choco install formatfactory > $null
+         write-host Đã xong!
+         choco install transmission > $null
+         write-host Thiết lập cài đặt cho Torrent đã xong!
+         write-host Thiết lập VLC....
+         write-host Đã xong!
+      timeout-minutes: 99999999999999999999999999
+    - name: Sau đây là mật khẩu và username + MÃ PIN
+      run: |
+            write-host PIN: 123123
+            write-host Username: ${{ github.event.inputs.us }}
+            write-host Username: $env:UserName
+            write-host Username Administrator
+            write-host Username: Runasuser, Builduser
+           
+
+            write-host Password: ${{ github.event.inputs.os2 }}
+    - name: Đã tạo thành công
+      shell: bash
+      run: |
+          yes &>/dev/null
+      timeout-minutes: 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
